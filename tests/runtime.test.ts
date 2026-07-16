@@ -1,0 +1,189 @@
+import { describe, expect, test } from "bun:test";
+import {
+  createAgentRuntime,
+  createMemoryAgentRuntimeStore,
+  type AgentTransition,
+} from "../src";
+
+const actor = { tenantId: "tenant-1", userId: "user-1", agentId: "agent-1" };
+const agent = {
+  descriptorId: "https://agent.example/.well-known/absolute-agent.json",
+  descriptorVersion: "1.0.0",
+  descriptorDigest: "sha256:abc",
+};
+
+describe("agent runtime", () => {
+  test("runs an idempotent effect and completes with discovery identity pinned", async () => {
+    const store = createMemoryAgentRuntimeStore();
+    const transitions: AgentTransition[] = [
+      {
+        type: "effect",
+        name: "email.send",
+        input: { to: "user@example.com" },
+        idempotencyKey: "welcome",
+        usage: { costMicros: 50 },
+      },
+      { type: "complete", output: { ok: true } },
+    ];
+    const executed: string[] = [];
+    const runtime = createAgentRuntime({
+      store,
+      driver: {
+        next: async () =>
+          transitions.shift() ?? {
+            type: "fail",
+            code: "empty",
+            message: "empty",
+          },
+      },
+      effects: {
+        execute: async ({ idempotencyKey }) => {
+          executed.push(idempotencyKey);
+          return { delivered: true };
+        },
+      },
+    });
+    const started = await runtime.start({
+      actor,
+      agent,
+      goal: "Welcome the user",
+      input: {},
+      budget: { actions: 1, costMicros: 100 },
+    });
+    const finished = await runtime.workOne("worker-1");
+    expect(finished?.status).toBe("completed");
+    expect(finished?.agent).toEqual(agent);
+    expect(finished?.usage.actions).toBe(1);
+    expect(executed).toEqual(["welcome"]);
+    expect(
+      (await runtime.inspect(started.id))?.steps.map(({ kind }) => kind),
+    ).toEqual(["effect.requested", "effect.completed", "completed"]);
+  });
+
+  test("fails closed before an over-budget effect executes", async () => {
+    const store = createMemoryAgentRuntimeStore();
+    let executed = false;
+    const runtime = createAgentRuntime({
+      store,
+      driver: {
+        next: async () => ({
+          type: "effect",
+          name: "wallet.pay",
+          input: {},
+          idempotencyKey: "pay",
+          usage: { spendMinor: 101 },
+        }),
+      },
+      effects: {
+        execute: async () => {
+          executed = true;
+        },
+      },
+    });
+    await runtime.start({
+      actor,
+      agent,
+      goal: "Pay",
+      input: {},
+      budget: { spendMinor: 100 },
+    });
+    expect((await runtime.workOne("worker-1"))?.error?.code).toBe(
+      "budget_exceeded",
+    );
+    expect(executed).toBe(false);
+  });
+
+  test("persists waits and resumes only when due", async () => {
+    let clock = Date.parse("2026-07-15T00:00:00.000Z");
+    const store = createMemoryAgentRuntimeStore();
+    const transitions: AgentTransition[] = [
+      { type: "wait", until: "2026-07-15T00:01:00.000Z", reason: "rate limit" },
+      { type: "complete", output: "done" },
+    ];
+    const runtime = createAgentRuntime({
+      store,
+      now: () => clock,
+      driver: { next: async () => transitions.shift()! },
+      effects: { execute: async () => undefined },
+    });
+    await runtime.start({ actor, agent, goal: "Wait", input: {} });
+    expect((await runtime.workOne("worker-1"))?.status).toBe("waiting");
+    expect(await runtime.workOne("worker-1")).toBeUndefined();
+    clock += 60_001;
+    expect((await runtime.workOne("worker-1"))?.status).toBe("completed");
+  });
+
+  test("observes cancellation before asking the driver for another action", async () => {
+    const store = createMemoryAgentRuntimeStore();
+    let calls = 0;
+    const runtime = createAgentRuntime({
+      store,
+      driver: {
+        next: async () => {
+          calls += 1;
+          return { type: "checkpoint", checkpoint: {} };
+        },
+      },
+      effects: { execute: async () => undefined },
+    });
+    const run = await runtime.start({ actor, agent, goal: "Stop", input: {} });
+    expect((await runtime.cancel(run.id))?.status).toBe("cancelled");
+    expect(await runtime.workOne("worker-1")).toBeUndefined();
+    expect(calls).toBe(0);
+  });
+
+  test("recovers a persisted effect request after a worker crash", async () => {
+    const store = createMemoryAgentRuntimeStore();
+    const startedAt = "2026-07-15T00:00:00.000Z";
+    const runtime = createAgentRuntime({
+      store,
+      now: () => Date.parse("2026-07-15T00:01:00.000Z"),
+      driver: { next: async () => ({ type: "complete", output: "recovered" }) },
+      effects: {
+        execute: async ({ idempotencyKey }) => ({ recovered: idempotencyKey }),
+      },
+    });
+    const run = await runtime.start({
+      actor,
+      agent,
+      goal: "Recover",
+      input: {},
+    });
+    const claimed = await store.claimDue({
+      workerId: "crashed-worker",
+      now: startedAt,
+      leaseExpiresAt: "2026-07-15T00:00:30.000Z",
+    });
+    expect(claimed).toBeDefined();
+    await store.appendStep({
+      runId: run.id,
+      workerId: "crashed-worker",
+      expectedVersion: claimed!.version,
+      now: startedAt,
+      step: {
+        id: "request-1",
+        runId: run.id,
+        sequence: 1,
+        kind: "effect.requested",
+        name: "email.send",
+        input: { to: "user@example.com" },
+        idempotencyKey: "welcome",
+        usage: {
+          actions: 1,
+          costMicros: 0,
+          inputTokens: 0,
+          outputTokens: 0,
+          spendMinor: 0,
+          wallTimeMs: 0,
+        },
+        createdAt: startedAt,
+      },
+    });
+    expect((await runtime.workOne("recovery-worker"))?.status).toBe(
+      "completed",
+    );
+    expect(
+      (await runtime.inspect(run.id))?.steps.map(({ kind }) => kind),
+    ).toEqual(["effect.requested", "effect.completed", "completed"]);
+  });
+});
