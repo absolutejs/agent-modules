@@ -2,6 +2,22 @@ import { defineManifest } from "@absolutejs/manifest";
 import { Type } from "@sinclair/typebox";
 export const manifest = defineManifest()({
   contract: 2,
+  discovery: {
+    audiences: ["agent-hosts", "security-teams"],
+    intents: [
+      "track agent context provenance",
+      "prevent prompt injection",
+      "guard agent sinks",
+    ],
+    keywords: [
+      "agents",
+      "provenance",
+      "taint",
+      "prompt-injection",
+      "guarded-sinks",
+    ],
+    protocols: ["AbsoluteJS Agent Trust"],
+  },
   identity: {
     name: "@absolutejs/agent-trust",
     category: "security",
@@ -13,8 +29,5 @@ export const manifest = defineManifest()({
     accent: "#f59e0b",
   },
   settings: Type.Object({}),
-  slots: {},
-  implements: [],
-  tools: {},
   wiring: [],
 });
