@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-discovery",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Signed, searchable, provider-neutral AI agent discovery with live schemas and A2A, MCP, Arazzo, and WebMCP interfaces.",
   "type": "module",
   "license": "MIT",
