@@ -2,6 +2,23 @@ import { defineManifest } from "@absolutejs/manifest";
 import { Type } from "@sinclair/typebox";
 export const manifest = defineManifest()({
   contract: 2,
+  discovery: {
+    audiences: ["agent-hosts", "application-developers"],
+    intents: [
+      "store agent memory",
+      "erase agent memory",
+      "authorize agent recall",
+    ],
+    keywords: [
+      "agents",
+      "memory",
+      "retention",
+      "erasure",
+      "provenance",
+      "retrieval",
+    ],
+    protocols: ["AbsoluteJS Agent Memory"],
+  },
   identity: {
     name: "@absolutejs/agent-memory",
     category: "data",
@@ -12,8 +29,5 @@ export const manifest = defineManifest()({
     accent: "#8b5cf6",
   },
   settings: Type.Object({}),
-  slots: {},
-  implements: [],
-  tools: {},
   wiring: [],
 });
