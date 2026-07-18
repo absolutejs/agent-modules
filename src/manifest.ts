@@ -3,6 +3,22 @@ import { Type } from "@sinclair/typebox";
 
 export const manifest = defineManifest<Record<string, never>>()({
   contract: 2,
+  discovery: {
+    audiences: ["agent-hosts", "platform-operators"],
+    intents: [
+      "run agents durably",
+      "recover agent work",
+      "enforce agent budgets",
+    ],
+    keywords: [
+      "agents",
+      "orchestration",
+      "durability",
+      "budgets",
+      "checkpoints",
+    ],
+    protocols: ["AbsoluteJS Agent Runtime"],
+  },
   identity: {
     accent: "#f97316",
     category: "ai",
