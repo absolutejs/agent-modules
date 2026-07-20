@@ -73,6 +73,10 @@ export type AgentMemoryStore = {
     scope: AgentMemoryScope,
     limit: number,
   ): Promise<StoredAgentMemoryRecord[]>;
+  listRecords(input: {
+    tenantId?: string;
+    limit: number;
+  }): Promise<StoredAgentMemoryRecord[]>;
   delete(scope: AgentMemoryScope, key: string): Promise<boolean>;
   eraseSubject(input: { tenantId: string; userId: string }): Promise<number>;
   prune(now: string, limit: number): Promise<number>;

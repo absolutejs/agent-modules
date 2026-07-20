@@ -120,6 +120,23 @@ export const createPostgresAgentMemoryStore = ({
           [...parts(scope), limit],
         )
       ).rows.map((row) => document(row)!),
+    listRecords: async ({ tenantId, limit }) => {
+      const bounded = Math.max(1, Math.min(limit, 200));
+      const result = tenantId
+        ? await client.query<{
+            document: StoredAgentMemoryRecord | string;
+          }>(
+            `SELECT document FROM ${ns}.records WHERE tenant_id=$1 ORDER BY updated_at DESC LIMIT $2`,
+            [tenantId, bounded],
+          )
+        : await client.query<{
+            document: StoredAgentMemoryRecord | string;
+          }>(
+            `SELECT document FROM ${ns}.records ORDER BY updated_at DESC LIMIT $1`,
+            [bounded],
+          );
+      return result.rows.map((row) => document(row)!);
+    },
     delete: async (scope, key) =>
       (
         await client.query(

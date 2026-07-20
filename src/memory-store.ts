@@ -47,6 +47,12 @@ export const createMemoryAgentMemoryStore = (): AgentMemoryStore => {
         .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))
         .slice(0, limit)
         .map((row) => structuredClone(row)),
+    listRecords: async ({ tenantId, limit }) =>
+      [...rows.values()]
+        .filter((row) => !tenantId || row.scope.tenantId === tenantId)
+        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))
+        .slice(0, Math.max(1, Math.min(limit, 200)))
+        .map((row) => structuredClone(row)),
     delete: async (scope, key) => rows.delete(keyOf(scope, key)),
     eraseSubject: async ({ tenantId, userId }) => {
       const matched = [...rows].filter(

@@ -23,6 +23,8 @@ export const createAgentMemory = ({
   codec = identityCodec,
   index,
   validateWrite,
+  requireExpiration = false,
+  maxTtlMs,
   now = Date.now,
   id = () => crypto.randomUUID(),
 }: {
@@ -31,9 +33,16 @@ export const createAgentMemory = ({
   codec?: AgentMemoryCodec;
   index?: AgentMemorySearchIndex;
   validateWrite?: (record: AgentMemoryRecord) => boolean | Promise<boolean>;
+  requireExpiration?: boolean;
+  maxTtlMs?: number;
   now?: () => number;
   id?: () => string;
 }) => {
+  if (
+    maxTtlMs !== undefined &&
+    (!Number.isSafeInteger(maxTtlMs) || maxTtlMs < 1)
+  )
+    throw new Error("Agent memory maxTtlMs must be a positive integer");
   const decode = async (
     stored: StoredAgentMemoryRecord,
   ): Promise<AgentMemoryRecord> => ({
@@ -77,6 +86,14 @@ export const createAgentMemory = ({
         throw new Error("Memory provenance digest is required");
       if (input.expiresAt && !Number.isFinite(Date.parse(input.expiresAt)))
         throw new Error("Invalid memory expiration");
+      if (requireExpiration && !input.expiresAt)
+        throw new Error("Agent memory expiration is required");
+      if (
+        input.expiresAt &&
+        maxTtlMs !== undefined &&
+        Date.parse(input.expiresAt) > now() + maxTtlMs
+      )
+        throw new Error("Agent memory expiration exceeds retention policy");
       const existing = await store.get(input.scope, input.key);
       const timestamp = new Date(now()).toISOString();
       const record: AgentMemoryRecord = {
@@ -154,6 +171,22 @@ export const createAgentMemory = ({
         const record = await decode(row);
         await permitted("read", actor, scope, record);
         output.push({ record, score: item.score });
+      }
+      return output;
+    },
+    list: async (actor: AgentMemoryActor, limit = 100) => {
+      const scope = { tenantId: actor.tenantId, namespace: "*" };
+      await permitted("search", actor, scope);
+      const output: AgentMemoryRecord[] = [];
+      const timestamp = new Date(now()).toISOString();
+      for (const stored of await store.listRecords({
+        tenantId: actor.tenantId,
+        limit: Math.max(1, Math.min(limit, 200)),
+      })) {
+        if (stored.expiresAt && stored.expiresAt <= timestamp) continue;
+        const record = await decode(stored);
+        await permitted("read", actor, record.scope, record);
+        output.push(record);
       }
       return output;
     },
