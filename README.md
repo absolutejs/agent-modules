@@ -10,6 +10,11 @@ returns separate instruction and data segments instead of interpolating tool,
 web, file, or memory content into a privileged prompt. Sink policies then fail
 closed before instructions or actions cross a trust boundary.
 
+Use `compileGuardedAgentContext` at provider boundaries. It enforces the
+instruction policy before compilation; the basic compiler also conservatively
+downgrades externally authoritative or tainted values mislabeled as
+instructions into the data channel.
+
 Taints propagate through derived model output. A sanitizer may remove named
 taints only while recording evidence and a new digest; there is no implicit
 "trusted because the model said so" conversion. Proof verification is injected,

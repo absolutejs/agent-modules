@@ -1,4 +1,9 @@
-import type { TrustedAgentValue } from "./types";
+import { AGENT_INSTRUCTION_POLICY, enforceAgentTrustPolicy } from "./trust";
+import type {
+  AgentProofVerifier,
+  AgentTrustSinkPolicy,
+  TrustedAgentValue,
+} from "./types";
 
 export type AgentContextSegment = {
   channel: "instructions" | "data";
@@ -20,7 +25,14 @@ export const compileAgentContext = (
   values: readonly TrustedAgentValue[],
 ): AgentContextSegment[] =>
   values.map((item) => ({
-    channel: item.purpose === "instruction" ? "instructions" : "data",
+    channel:
+      item.purpose === "instruction" &&
+      AGENT_INSTRUCTION_POLICY.allowedAuthorities?.includes(item.authority) &&
+      !item.taints.some((taint) =>
+        AGENT_INSTRUCTION_POLICY.deniedTaints?.includes(taint),
+      )
+        ? "instructions"
+        : "data",
     content:
       typeof item.value === "string" ? item.value : JSON.stringify(item.value),
     metadata: {
@@ -30,6 +42,28 @@ export const compileAgentContext = (
       taints: [...item.taints],
     },
   }));
+
+/** Enforces sink policy before compiling provider context. */
+export const compileGuardedAgentContext = async ({
+  values,
+  instructionPolicy = AGENT_INSTRUCTION_POLICY,
+  dataPolicy,
+  verifyProof,
+}: {
+  values: readonly TrustedAgentValue[];
+  instructionPolicy?: AgentTrustSinkPolicy;
+  dataPolicy?: AgentTrustSinkPolicy;
+  verifyProof?: AgentProofVerifier;
+}): Promise<AgentContextSegment[]> => {
+  for (const value of values) {
+    if (value.purpose === "instruction")
+      await enforceAgentTrustPolicy(value, instructionPolicy, verifyProof);
+    else if (dataPolicy)
+      await enforceAgentTrustPolicy(value, dataPolicy, verifyProof);
+  }
+
+  return compileAgentContext(values);
+};
 
 export const detectPromptInjection = async <Value>(
   input: TrustedAgentValue<Value>,
