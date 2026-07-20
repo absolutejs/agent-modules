@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import {
   AgentEffectDeferredError,
   createAgentRuntime,
+  createAgentRuntimeWorker,
   createMemoryAgentRuntimeStore,
   type AgentTransition,
 } from "../src";
@@ -230,9 +231,7 @@ describe("agent runtime", () => {
         execute: async () => {
           effectCalls += 1;
           if (effectCalls === 1)
-            throw new AgentEffectDeferredError(
-              "2026-07-15T00:00:10.000Z",
-            );
+            throw new AgentEffectDeferredError("2026-07-15T00:00:10.000Z");
           return { delivered: true };
         },
       },
@@ -249,5 +248,25 @@ describe("agent runtime", () => {
     expect(
       (await runtime.inspect(started.id))?.steps.map(({ kind }) => kind),
     ).toEqual(["effect.requested", "effect.completed", "completed"]);
+  });
+
+  test("runs through an observable drainable worker", async () => {
+    const runtime = createAgentRuntime({
+      driver: { next: async () => ({ output: "done", type: "complete" }) },
+      effects: { execute: async () => undefined },
+      store: createMemoryAgentRuntimeStore(),
+    });
+    await runtime.start({ actor, agent, goal: "Work", input: {} });
+    const worker = createAgentRuntimeWorker({ runtime, workerId: "worker-1" });
+    expect((await worker.runOnce())?.status).toBe("completed");
+    expect(worker.metrics()).toMatchObject({
+      claimed: 1,
+      completed: 1,
+      failed: 0,
+      polls: 1,
+    });
+    worker.drain();
+    expect(await worker.runOnce()).toBeUndefined();
+    await worker.stop();
   });
 });

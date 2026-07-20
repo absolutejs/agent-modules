@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-runtime",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Durable provider-neutral AI agent runs, steps, checkpoints, budgets, leases, timers, effects, and handoffs.",
   "type": "module",
   "license": "MIT",

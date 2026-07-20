@@ -3,3 +3,4 @@ export * from "./budget";
 export * from "./memory";
 export * from "./runtime";
 export * from "./postgres";
+export * from "./worker";
