@@ -272,6 +272,7 @@ export const createAgentRuntime = ({
     },
     cancel: (runId) =>
       store.requestCancel({ runId, now: new Date(now()).toISOString() }),
+    list: (input) => store.listRuns(input),
     inspect: async (runId) => {
       const run = await store.getRun(runId);
       return run ? { run, steps: await store.listSteps(runId) } : undefined;

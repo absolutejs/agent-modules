@@ -103,6 +103,25 @@ export const createPostgresAgentRuntimeStore = ({
           [id],
         )
       ).rows[0]?.document,
+    listRuns: async ({ limit = 50, status, tenantId, userId } = {}) => {
+      const params: unknown[] = [];
+      const filters: string[] = [];
+      const add = (condition: string, value: unknown) => {
+        params.push(value);
+        filters.push(condition.replace("?", `$${params.length}`));
+      };
+      if (status) add("status=?", status);
+      if (tenantId) add("document->'actor'->>'tenantId'=?", tenantId);
+      if (userId) add("document->'actor'->>'userId'=?", userId);
+      params.push(Math.max(1, Math.min(limit, 200)));
+      const where = filters.length ? ` WHERE ${filters.join(" AND ")}` : "";
+      return (
+        await client.query<RunRow>(
+          `SELECT document FROM ${ns}.runs${where} ORDER BY created_at DESC, id DESC LIMIT $${params.length}`,
+          params,
+        )
+      ).rows.map((row) => row.document);
+    },
     listSteps: async (runId) =>
       (
         await client.query<StepRow>(

@@ -13,6 +13,26 @@ const agent = {
 };
 
 describe("agent runtime", () => {
+  test("lists runs within an actor scope", async () => {
+    const store = createMemoryAgentRuntimeStore();
+    const runtime = createAgentRuntime({
+      store,
+      driver: { next: async () => ({ type: "complete", output: null }) },
+      effects: { execute: async () => undefined },
+    });
+    await runtime.start({ actor, agent, goal: "Owned", input: {} });
+    await runtime.start({
+      actor: { ...actor, tenantId: "tenant-2" },
+      agent,
+      goal: "Other tenant",
+      input: {},
+    });
+    expect(await runtime.list({ tenantId: actor.tenantId })).toHaveLength(1);
+    expect((await runtime.list({ tenantId: actor.tenantId }))[0]?.goal).toBe(
+      "Owned",
+    );
+  });
+
   test("runs an idempotent effect and completes with discovery identity pinned", async () => {
     const store = createMemoryAgentRuntimeStore();
     const transitions: AgentTransition[] = [

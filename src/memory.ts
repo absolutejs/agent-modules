@@ -14,6 +14,17 @@ export const createMemoryAgentRuntimeStore = (): AgentRuntimeStore => {
       steps.set(run.id, []);
     },
     getRun: async (id) => clone(runs.get(id)),
+    listRuns: async ({ limit = 50, status, tenantId, userId } = {}) =>
+      [...runs.values()]
+        .filter(
+          (run) =>
+            (!status || run.status === status) &&
+            (!tenantId || run.actor.tenantId === tenantId) &&
+            (!userId || run.actor.userId === userId),
+        )
+        .sort((left, right) => right.createdAt.localeCompare(left.createdAt))
+        .slice(0, Math.max(1, Math.min(limit, 200)))
+        .map(clone),
     listSteps: async (runId) => clone(steps.get(runId) ?? []),
     claimDue: async ({ workerId, now, leaseExpiresAt }) => {
       const timestamp = Date.parse(now);

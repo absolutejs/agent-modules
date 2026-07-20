@@ -90,6 +90,12 @@ export type AgentRunEvent =
 export type AgentRuntimeStore = {
   createRun(run: AgentRun): Promise<void>;
   getRun(id: string): Promise<AgentRun | undefined>;
+  listRuns(input?: {
+    limit?: number;
+    status?: AgentRunStatus;
+    tenantId?: string;
+    userId?: string;
+  }): Promise<readonly AgentRun[]>;
   listSteps(runId: string): Promise<readonly AgentStep[]>;
   claimDue(input: {
     workerId: string;
@@ -185,6 +191,12 @@ export type AgentRuntime = {
     parentRunId?: string;
   }): Promise<AgentRun>;
   cancel(runId: string): Promise<AgentRun | undefined>;
+  list(input?: {
+    limit?: number;
+    status?: AgentRunStatus;
+    tenantId?: string;
+    userId?: string;
+  }): Promise<readonly AgentRun[]>;
   inspect(
     runId: string,
   ): Promise<{ run: AgentRun; steps: readonly AgentStep[] } | undefined>;
