@@ -143,6 +143,18 @@ export type AgentEffectExecutor = {
   }): Promise<unknown>;
 };
 
+/** Signals that an idempotent effect was durably accepted by an external
+ * executor but is not terminal yet. */
+export class AgentEffectDeferredError extends Error {
+  readonly retryAt: string;
+
+  constructor(retryAt: string) {
+    super("Agent effect is pending durable execution");
+    this.name = "AgentEffectDeferredError";
+    this.retryAt = retryAt;
+  }
+}
+
 export type AgentTransition =
   | {
       type: "continue";

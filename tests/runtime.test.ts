@@ -1,5 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
+  AgentEffectDeferredError,
   createAgentRuntime,
   createMemoryAgentRuntimeStore,
   type AgentTransition,
@@ -204,6 +205,49 @@ describe("agent runtime", () => {
     );
     expect(
       (await runtime.inspect(run.id))?.steps.map(({ kind }) => kind),
+    ).toEqual(["effect.requested", "effect.completed", "completed"]);
+  });
+
+  test("waits for a durable effect and resumes its original request", async () => {
+    let clock = Date.parse("2026-07-15T00:00:00.000Z");
+    let effectCalls = 0;
+    const store = createMemoryAgentRuntimeStore();
+    const runtime = createAgentRuntime({
+      store,
+      now: () => clock,
+      driver: {
+        next: async ({ steps }) =>
+          steps.some(({ kind }) => kind === "effect.completed")
+            ? { type: "complete", output: "done" }
+            : {
+                type: "effect",
+                name: "email.send",
+                input: { to: "user@example.com" },
+                idempotencyKey: "welcome",
+              },
+      },
+      effects: {
+        execute: async () => {
+          effectCalls += 1;
+          if (effectCalls === 1)
+            throw new AgentEffectDeferredError(
+              "2026-07-15T00:00:10.000Z",
+            );
+          return { delivered: true };
+        },
+      },
+    });
+    const started = await runtime.start({
+      actor,
+      agent,
+      goal: "Welcome",
+      input: {},
+    });
+    expect((await runtime.workOne("worker-1"))?.status).toBe("waiting");
+    clock += 10_001;
+    expect((await runtime.workOne("worker-2"))?.status).toBe("completed");
+    expect(
+      (await runtime.inspect(started.id))?.steps.map(({ kind }) => kind),
     ).toEqual(["effect.requested", "effect.completed", "completed"]);
   });
 });

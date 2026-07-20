@@ -1,4 +1,5 @@
 import { normalizeUsage, remainingBudget, zeroUsage } from "./budget";
+import { AgentEffectDeferredError } from "./types";
 import type {
   AgentDriver,
   AgentEffectExecutor,
@@ -123,6 +124,14 @@ export const createAgentRuntime = ({
           })
         ).run;
       } catch (error) {
+        if (error instanceof AgentEffectDeferredError) {
+          if (!Number.isFinite(Date.parse(error.retryAt)))
+            throw new Error("Invalid deferred effect retry timestamp");
+          return transition(requested.run, workerId, {
+            status: "waiting",
+            wakeAt: error.retryAt,
+          });
+        }
         const failed = await append(requested.run, workerId, {
           kind: "effect.failed",
           name: result.name,
@@ -235,6 +244,14 @@ export const createAgentRuntime = ({
         })
       ).run;
     } catch (error) {
+      if (error instanceof AgentEffectDeferredError) {
+        if (!Number.isFinite(Date.parse(error.retryAt)))
+          throw new Error("Invalid deferred effect retry timestamp");
+        return transition(run, workerId, {
+          status: "waiting",
+          wakeAt: error.retryAt,
+        });
+      }
       const message = error instanceof Error ? error.message : "Effect failed";
       const failed = await append(run, workerId, {
         kind: "effect.failed",
