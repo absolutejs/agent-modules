@@ -22,6 +22,8 @@ const portableJsonb = customType<{ data: unknown; driverData: unknown }>({
     typeof value === "string" ? JSON.parse(value) : value,
   toDriver: (value) => JSON.stringify(value),
 });
+const encodedJsonb = <Value>(value: Value) =>
+  sql<Value>`${JSON.stringify(value)}::text::jsonb`;
 
 const namespaceOf = (value: string) => {
   if (!/^[a-z_][a-z0-9_]*$/i.test(value))
@@ -200,7 +202,7 @@ export const createDrizzleAgentMemoryStore = <DB extends AnyPgDatabase>(
         const parts = scopeParts(record.scope);
         const values = {
           agent_id: parts.agentId,
-          document: record,
+          document: encodedJsonb(record),
           expires_at: record.expiresAt ? new Date(record.expiresAt) : null,
           id: record.id,
           memory_key: record.key,
@@ -220,7 +222,7 @@ export const createDrizzleAgentMemoryStore = <DB extends AnyPgDatabase>(
             : await transaction
                 .update(records)
                 .set({
-                  document: record,
+                  document: encodedJsonb(record),
                   expires_at: values.expires_at,
                   updated_at: values.updated_at,
                   version: record.version,

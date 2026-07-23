@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-memory",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Scoped durable provenance-aware memory with authorization, retention, erasure, encryption seams, and pluggable retrieval for AI agents.",
   "type": "module",
   "license": "MIT",
