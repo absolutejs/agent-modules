@@ -30,6 +30,11 @@ export const manifest = defineManifest<Record<string, never>>()({
     tagline:
       "Make trustworthy AbsoluteJS agents easier to find than any other agent.",
   },
+  integration: {
+    description:
+      "The host must provide canonical descriptors, a non-exportable signing identity, hardened egress for remote discovery, and durable registry storage when indexing agents.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });
