@@ -28,6 +28,11 @@ export const manifest = defineManifest<Record<string, never>>()({
     name: "@absolutejs/agent-control",
     tagline: "See and stop every capability an agent holds.",
   },
+  integration: {
+    description:
+      "The host must bind authenticated operators, exact scopes, durable operation and playground stores, Agency state, kill switches, and auditable execution adapters.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });
