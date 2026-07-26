@@ -29,6 +29,11 @@ export const manifest = defineManifest()({
     docsUrl: "https://github.com/absolutejs/agent-sandbox",
     accent: "#ef4444",
   },
+  integration: {
+    description:
+      "The host must issue narrow expiring grants and bind only the HTTP, filesystem, process, and credential adapters its isolation boundary can enforce.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });
