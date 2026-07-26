@@ -28,6 +28,11 @@ export const manifest = defineManifest()({
     docsUrl: "https://github.com/absolutejs/agent-memory",
     accent: "#8b5cf6",
   },
+  integration: {
+    description:
+      "The host must supply scoped authorization, durable storage, encryption, retention, erasure, provenance policy, and any retrieval index.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });
