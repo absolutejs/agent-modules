@@ -28,6 +28,11 @@ export const manifest = defineManifest()({
     docsUrl: "https://github.com/absolutejs/agent-trust",
     accent: "#f59e0b",
   },
+  integration: {
+    description:
+      "The host must define trusted instruction sources, taint propagation, sanitizers, and fail-closed sink policies for its own data and effect boundaries.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });
