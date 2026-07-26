@@ -28,6 +28,11 @@ export const manifest = defineManifest<Record<string, never>>()({
     name: "@absolutejs/agent-runtime",
     tagline: "Run agents durably without choosing their model provider.",
   },
+  integration: {
+    description:
+      "The host must supply a transactional runtime store, model driver, idempotent effect executor, migrations, workers, and production readiness checks.",
+    mode: "code-first",
+  },
   settings: Type.Object({}),
   wiring: [],
 });

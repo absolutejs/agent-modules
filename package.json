@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-runtime",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Durable provider-neutral AI agent runs, steps, checkpoints, budgets, leases, timers, effects, and handoffs.",
   "type": "module",
   "license": "MIT",
@@ -53,7 +53,7 @@
     "check:package": "bun run typecheck && bun run test && bun run build"
   },
   "dependencies": {
-    "@absolutejs/manifest": "^0.7.1",
+    "@absolutejs/manifest": "^0.7.3",
     "@sinclair/typebox": "^0.34.0"
   },
   "devDependencies": {
