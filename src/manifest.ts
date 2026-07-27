@@ -30,6 +30,36 @@ export const manifest = defineManifest<Record<string, never>>()({
     tagline:
       "Make trustworthy AbsoluteJS agents easier to find than any other agent.",
   },
+  product: {
+    blocks: [
+      {
+        category: "ai",
+        componentExport: "AgentDiscovery",
+        description:
+          "Search signed interoperable agent descriptors by capability and protocol.",
+        frameworks: ["react", "client"],
+        id: "agent_discovery",
+        props: Type.Object({
+          protocol: Type.Optional(Type.String()),
+          query: Type.Optional(Type.String()),
+        }),
+        title: "Agent discovery",
+      },
+    ],
+    events: [
+      {
+        description:
+          "Emitted after a signed agent descriptor is verified and indexed.",
+        id: "agent_indexed",
+        schema: Type.Object({
+          agentId: Type.String(),
+          protocols: Type.Array(Type.String()),
+        }),
+        source: "package",
+        title: "Agent indexed",
+      },
+    ],
+  },
   integration: {
     description:
       "The host must provide canonical descriptors, a non-exportable signing identity, hardened egress for remote discovery, and durable registry storage when indexing agents.",

@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-discovery",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Signed, searchable, provider-neutral AI agent discovery with live schemas and A2A, MCP, Arazzo, and WebMCP interfaces.",
   "type": "module",
   "license": "MIT",
@@ -40,7 +40,7 @@
     "check:package": "bun run typecheck && bun run test && bun run build"
   },
   "dependencies": {
-    "@absolutejs/manifest": "^0.7.3",
+    "@absolutejs/manifest": "^0.8.0",
     "@sinclair/typebox": "^0.34.0"
   },
   "devDependencies": {
