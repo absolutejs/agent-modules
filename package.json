@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-reputation",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Evidence-based scoped AI agent reputation with W3C Verifiable Credentials 2.0 adapters.",
   "type": "module",
   "license": "MIT",
@@ -63,7 +63,7 @@
     "check:package": "bun run format && bun run typecheck && bun run test && bun run build"
   },
   "dependencies": {
-    "@absolutejs/manifest": "^0.7.1",
+    "@absolutejs/manifest": "^0.8.0",
     "@sinclair/typebox": "^0.34.0",
     "drizzle-typebox": "1.0.0-beta.14-a36c63d"
   },

@@ -29,6 +29,41 @@ export const manifest = defineManifest<Record<string, never>>()({
     name: "@absolutejs/agent-reputation",
     tagline: "Trust portable evidence, not a gameable global score.",
   },
+  product: {
+    blocks: [
+      {
+        category: "ai",
+        componentExport: "AgentReputationEvidence",
+        description:
+          "Show scoped, expiring, issuer-capped reputation evidence without turning it into authorization.",
+        frameworks: ["react", "client"],
+        id: "agent_reputation_evidence",
+        props: Type.Object({
+          agentId: Type.String({ minLength: 1 }),
+          scope: Type.String({ minLength: 1 }),
+        }),
+        title: "Agent reputation evidence",
+      },
+    ],
+    events: [
+      {
+        description:
+          "Emitted when verified reputation evidence is issued, revoked, or expires.",
+        id: "reputation_evidence_changed",
+        schema: Type.Object({
+          agentId: Type.String(),
+          evidenceId: Type.String(),
+          state: Type.Union([
+            Type.Literal("issued"),
+            Type.Literal("revoked"),
+            Type.Literal("expired"),
+          ]),
+        }),
+        source: "package",
+        title: "Reputation evidence changed",
+      },
+    ],
+  },
   implements: [
     defineImplementation<never>()({
       contract: "agent-reputation/store",
