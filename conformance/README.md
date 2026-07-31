@@ -68,6 +68,33 @@ Implement only the harnesses relevant to your package:
   mandates, or other bounded capabilities.
 - `TaskConformanceHarness` for durable task ownership and cancellation.
 
+## Rejections must name their control
+
+Every scenario that expects a rejection asserts on a token from the control's
+own vocabulary — `"lease"`, `"owner"`, `"private"`, `"host"`, `"replay"`,
+`"denied"`, `"bound"`, `"scope"`, `"actor"`, `"destination"`. Your
+implementation's error message has to contain it.
+
+This is a real obligation, and it exists because the alternative is worse. A
+scenario that accepts _any_ rejection passes on failures that have nothing to
+do with the control it claims to test:
+
+```
+fetch("https://api.example.com.evil.test")
+  -> "Unable to connect. Is the computer able to access the url?"
+fetch("https://169.254.169.254/latest")
+  -> "The operation timed out."
+```
+
+Both throw. Before 0.15.0 both satisfied the egress scenarios on any machine —
+so a suite meant to prove SSRF and lookalike-origin defences proved nothing,
+and reported a green tick while doing it. `.evil.test` is a reserved TLD that
+can never resolve, which means that scenario could not have failed for the
+right reason even in principle.
+
+An unnamed rejection is indistinguishable from an accident. Naming the control
+is what makes a pass mean something.
+
 ## License
 
 MIT

@@ -31,16 +31,36 @@ const scenario = async (name: string, run: () => Promise<void>) => {
   }
 };
 
-const rejects = async (run: () => Promise<unknown>, expected?: string) => {
+/**
+ * Assert that `run` is rejected BY THE CONTROL UNDER TEST.
+ *
+ * `expected` is required, and that is the whole point. A conformance scenario
+ * that accepts any rejection passes on failures that have nothing to do with
+ * the control:
+ *
+ *   fetch("https://api.example.com.evil.test")
+ *     -> "Unable to connect. Is the computer able to access the url?"
+ *   fetch("https://169.254.169.254/latest")
+ *     -> "The operation timed out."
+ *
+ * Both throw. Both used to satisfy the egress scenarios on any machine, whether
+ * or not an egress guard existed at all — so a suite meant to prove SSRF and
+ * lookalike-origin defences proved nothing, and said so with a green tick.
+ *
+ * Requiring a token means an implementation has to NAME the control it
+ * enforced. That is a real obligation on implementers, and a deliberate one:
+ * an unnamed rejection is indistinguishable from an accident.
+ */
+const rejects = async (run: () => Promise<unknown>, expected: string) => {
   try {
     await run();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
-    if (
-      expected !== undefined &&
-      !message.toLowerCase().includes(expected.toLowerCase())
-    )
-      throw new Error(`Rejection did not mention ${expected}: ${message}`);
+    if (!message.toLowerCase().includes(expected.toLowerCase()))
+      throw new Error(
+        `Rejection did not mention "${expected}", so it cannot be attributed` +
+          ` to the control under test: ${message}`,
+      );
     return;
   }
   throw new Error("Operation unexpectedly succeeded");
@@ -88,7 +108,7 @@ export const runCapabilityConformance = async (
         operation: "send",
       };
       await harness.use(id, request);
-      await rejects(() => harness.use(id, request));
+      await rejects(() => harness.use(id, request), "replay");
     }),
     scenario("capability/concurrent-maximum-use", async () => {
       const harness = await create();
@@ -185,14 +205,14 @@ export const runActionConformance = async (
       const actionId = await harness.request();
       const leaseId = await harness.issueLease(actionId);
       await harness.execute(leaseId);
-      await rejects(() => harness.execute(leaseId));
+      await rejects(() => harness.execute(leaseId), "lease");
     }),
     scenario("action/failed-execution-consumes-lease", async () => {
       const harness = await create();
       const actionId = await harness.request();
       const leaseId = await harness.issueLease(actionId);
-      await rejects(() => harness.execute(leaseId, { fail: true }));
-      await rejects(() => harness.execute(leaseId));
+      await rejects(() => harness.execute(leaseId, { fail: true }), "failure");
+      await rejects(() => harness.execute(leaseId), "lease");
     }),
     scenario("action/denial-cannot-lease", async () => {
       const harness = await create();
@@ -223,8 +243,8 @@ export const runTaskConformance = async (
     scenario("task/owner-isolation", async () => {
       const harness = await create();
       const taskId = await harness.create("agent-a");
-      await rejects(() => harness.get(taskId, "agent-b"));
-      await rejects(() => harness.cancel(taskId, "agent-b"));
+      await rejects(() => harness.get(taskId, "agent-b"), "owner");
+      await rejects(() => harness.cancel(taskId, "agent-b"), "owner");
       await harness.get(taskId, "agent-a");
     }),
   ]);
@@ -243,11 +263,17 @@ export const runEgressConformance = async (
   const results = await Promise.all([
     scenario("egress/private-network", async () => {
       const harness = await create();
-      await rejects(() => harness.request("https://169.254.169.254/latest"));
+      await rejects(
+        () => harness.request("https://169.254.169.254/latest"),
+        "private",
+      );
     }),
     scenario("egress/lookalike-host", async () => {
       const harness = await create();
-      await rejects(() => harness.request("https://api.example.com.evil.test"));
+      await rejects(
+        () => harness.request("https://api.example.com.evil.test"),
+        "host",
+      );
     }),
     scenario("egress/redirect-credential-isolation", async () => {
       const harness = await create();
