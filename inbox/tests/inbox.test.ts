@@ -1,0 +1,152 @@
+import { describe, expect, test } from "bun:test";
+import { createAgentInbox, createMemoryAgentInboxStore } from "../src";
+const target = {
+  tenantId: "tenant",
+  userId: "user",
+  agentId: "agent",
+  agent: {
+    descriptorId: "https://agent.example",
+    descriptorVersion: "1",
+    descriptorDigest: "sha256:abc",
+  },
+  budget: {
+    actions: 3,
+    costMicros: 100,
+    inputTokens: 100,
+    outputTokens: 100,
+    spendMinor: 0,
+    wallTimeMs: 60_000,
+  },
+  goal: "Handle verified event",
+};
+describe("agent inbox", () => {
+  test("verifies, deduplicates, leases, and delivers subscribed events", async () => {
+    const store = createMemoryAgentInboxStore();
+    let handled = 0;
+    const inbox = createAgentInbox({
+      store,
+      verifiers: {
+        github: {
+          id: "github-sha256",
+          verify: async ({ eventId }) => ({
+            valid: true,
+            tenantId: "tenant",
+            payload: { eventId },
+            proof: { signature: "ok" },
+          }),
+        },
+      },
+      now: () => Date.parse("2026-07-15T00:00:00Z"),
+      id: (() => {
+        let n = 0;
+        return () => `id-${++n}`;
+      })(),
+    });
+    await inbox.subscribe({
+      id: "sub",
+      target,
+      source: "github",
+      kinds: ["push"],
+      maxAttempts: 3,
+      messageTtlMs: 60_000,
+      enabled: true,
+      createdAt: "2026-07-15T00:00:00Z",
+    });
+    const input = {
+      source: "github",
+      eventId: "evt",
+      kind: "push",
+      body: new TextEncoder().encode("{}"),
+      headers: new Headers(),
+    };
+    expect(await inbox.ingest(input)).toHaveLength(1);
+    expect((await inbox.ingest(input))[0]?.id).toBe("id-1");
+    await inbox.workOne("worker", async ({ payload }) => {
+      handled++;
+      expect(payload).toEqual({ eventId: "evt" });
+    });
+    expect(handled).toBe(1);
+  });
+  test("materializes deterministic schedule occurrences once", async () => {
+    const store = createMemoryAgentInboxStore();
+    const inbox = createAgentInbox({
+      store,
+      verifiers: {},
+      codec: {
+        encode: async (value) => ({ ciphertext: btoa(JSON.stringify(value)) }),
+        decode: async (value) =>
+          JSON.parse(atob((value as { ciphertext: string }).ciphertext)),
+      },
+      now: () => Date.parse("2026-07-15T00:00:00Z"),
+      id: () => "message",
+    });
+    await inbox.schedule({
+      id: "daily",
+      target,
+      source: "schedule",
+      kind: "tick",
+      payload: {},
+      intervalMs: 60_000,
+      nextAt: "2026-07-15T00:00:00Z",
+      enabled: true,
+      maxAttempts: 3,
+      messageTtlMs: 60_000,
+      createdAt: "2026-07-14T00:00:00Z",
+    });
+    const [stored] = await inbox.listSchedules("tenant");
+    expect(stored).not.toHaveProperty("payload");
+    expect(stored?.encodedPayload).toEqual({ ciphertext: "e30=" });
+    expect((await inbox.tickSchedule())?.sourceEventId).toBe(
+      "daily:2026-07-15T00:00:00Z",
+    );
+    expect(await inbox.tickSchedule()).toBeUndefined();
+  });
+  test("inventories and disables tenant triggers and cancels pending messages", async () => {
+    const store = createMemoryAgentInboxStore();
+    const inbox = createAgentInbox({
+      store,
+      verifiers: {
+        github: {
+          id: "github-sha256",
+          verify: async () => ({
+            valid: true,
+            tenantId: "tenant",
+            payload: {},
+          }),
+        },
+      },
+      now: () => Date.parse("2026-07-15T00:00:00Z"),
+      id: () => "message",
+    });
+    await inbox.subscribe({
+      id: "sub",
+      target,
+      source: "github",
+      kinds: ["push"],
+      maxAttempts: 3,
+      messageTtlMs: 60_000,
+      enabled: true,
+      createdAt: "2026-07-15T00:00:00Z",
+    });
+    const [message] = await inbox.ingest({
+      source: "github",
+      eventId: "evt",
+      kind: "push",
+      body: new TextEncoder().encode("{}"),
+      headers: new Headers(),
+    });
+    expect(await inbox.listSubscriptions("tenant")).toHaveLength(1);
+    expect(await inbox.listMessages("tenant")).toHaveLength(1);
+    expect(
+      await inbox.setSubscriptionEnabled({
+        id: "sub",
+        tenantId: "tenant",
+        enabled: false,
+      }),
+    ).toBe(true);
+    expect(
+      await inbox.cancelMessage({ id: message!.id, tenantId: "tenant" }),
+    ).toBe(true);
+    expect((await inbox.listMessages("tenant"))[0]?.status).toBe("cancelled");
+  });
+});
