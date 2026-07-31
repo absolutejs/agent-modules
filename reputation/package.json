@@ -1,0 +1,85 @@
+{
+  "name": "@absolutejs/agent-reputation",
+  "version": "0.2.2",
+  "description": "Evidence-based scoped AI agent reputation with W3C Verifiable Credentials 2.0 adapters.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Alex Kahn",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/absolutejs/agent-reputation.git"
+  },
+  "homepage": "https://github.com/absolutejs/agent-reputation",
+  "bugs": {
+    "url": "https://github.com/absolutejs/agent-reputation/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./drizzle": {
+      "types": "./dist/drizzle.d.ts",
+      "import": "./dist/drizzle.js"
+    },
+    "./manifest": {
+      "types": "./dist/manifest.d.ts",
+      "import": "./dist/manifest.js"
+    },
+    "./manifest.json": "./dist/manifest.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "absolutejs": {
+    "manifestContract": 2,
+    "runtimePeers": {
+      "drizzle-orm": {
+        "artifactImports": [
+          "drizzle-orm",
+          "drizzle-orm/pg-core"
+        ],
+        "buildExternals": [
+          "drizzle-orm"
+        ],
+        "optional": true,
+        "range": ">=1.0.0-rc.4 <2",
+        "tested": "1.0.0-rc.4"
+      }
+    }
+  },
+  "scripts": {
+    "format": "prettier --write \"./**/*.{ts,json,md,yml}\"",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "build": "rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+    "check:package": "bun run format && bun run typecheck && bun run test && bun run build"
+  },
+  "dependencies": {
+    "@absolutejs/manifest": "^0.8.0",
+    "@sinclair/typebox": "^0.34.0",
+    "drizzle-typebox": "1.0.0-beta.14-a36c63d"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.3.14",
+    "@types/bun": "^1.3.14",
+    "drizzle-orm": "1.0.0-rc.4",
+    "prettier": "^3.8.3",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "drizzle-orm": ">=1.0.0-rc.4 <2"
+  },
+  "peerDependenciesMeta": {
+    "drizzle-orm": {
+      "optional": true
+    }
+  }
+}
