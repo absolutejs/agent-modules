@@ -1,0 +1,245 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "name": "@absolutejs/agent-modules",
+      "devDependencies": {
+        "prettier": "3.8.3",
+      },
+    },
+    "conformance": {
+      "name": "@absolutejs/agent-conformance",
+      "version": "0.14.1",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.4.0",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "prettier": "^3.8.3",
+        "typescript": "^6.0.3",
+      },
+    },
+    "control": {
+      "name": "@absolutejs/agent-control",
+      "version": "0.5.7",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@absolutejs/agency": "0.7.3",
+        "@types/bun": "^1.3.14",
+        "drizzle-orm": "1.0.0-rc.4",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+      "peerDependencies": {
+        "@absolutejs/agency": ">=0.7.3 <0.8.0",
+        "drizzle-orm": ">=1.0.0-rc.4 <2",
+      },
+    },
+    "discovery": {
+      "name": "@absolutejs/agent-discovery",
+      "version": "0.2.3",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.8.0",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+    },
+    "inbox": {
+      "name": "@absolutejs/agent-inbox",
+      "version": "0.3.4",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "drizzle-orm": "1.0.0-rc.4",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+      "peerDependencies": {
+        "drizzle-orm": ">=1.0.0-rc.4 <2",
+      },
+    },
+    "memory": {
+      "name": "@absolutejs/agent-memory",
+      "version": "0.1.6",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "drizzle-orm": "1.0.0-rc.4",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+      "peerDependencies": {
+        "drizzle-orm": ">=1.0.0-rc.4 <2",
+      },
+    },
+    "reputation": {
+      "name": "@absolutejs/agent-reputation",
+      "version": "0.2.2",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.8.0",
+        "@sinclair/typebox": "^0.34.0",
+        "drizzle-typebox": "1.0.0-beta.14-a36c63d",
+      },
+      "devDependencies": {
+        "@electric-sql/pglite": "0.3.14",
+        "@types/bun": "^1.3.14",
+        "drizzle-orm": "1.0.0-rc.4",
+        "prettier": "^3.8.3",
+        "typescript": "^6.0.3",
+      },
+      "peerDependencies": {
+        "drizzle-orm": ">=1.0.0-rc.4 <2",
+      },
+      "optionalPeers": [
+        "drizzle-orm",
+      ],
+    },
+    "runtime": {
+      "name": "@absolutejs/agent-runtime",
+      "version": "0.2.5",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "drizzle-orm": "1.0.0-rc.4",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+      "peerDependencies": {
+        "drizzle-orm": ">=1.0.0-rc.4 <2",
+      },
+    },
+    "sandbox": {
+      "name": "@absolutejs/agent-sandbox",
+      "version": "0.2.1",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+    },
+    "trust": {
+      "name": "@absolutejs/agent-trust",
+      "version": "0.2.1",
+      "dependencies": {
+        "@absolutejs/manifest": "^0.7.3",
+        "@sinclair/typebox": "^0.34.0",
+      },
+      "devDependencies": {
+        "@types/bun": "^1.3.14",
+        "prettier": "3.5.3",
+        "typescript": "5.8.3",
+      },
+    },
+  },
+  "packages": {
+    "@absolutejs/agency": ["@absolutejs/agency@0.7.3", "", { "dependencies": { "@absolutejs/manifest": "^0.7.2", "@sinclair/typebox": "^0.34.0" }, "peerDependencies": { "drizzle-orm": ">=1.0.0-rc.4 <2" } }, "sha512-htWVOVl/vmgDCMT2qwYZOnDUSatoReiLkuQ/D1n6p7Co6h/bW+Wg4VB9xO8yqTBBTPnNpJhQUn2fQD7WlsTSNw=="],
+
+    "@absolutejs/agent-conformance": ["@absolutejs/agent-conformance@workspace:conformance"],
+
+    "@absolutejs/agent-control": ["@absolutejs/agent-control@workspace:control"],
+
+    "@absolutejs/agent-discovery": ["@absolutejs/agent-discovery@workspace:discovery"],
+
+    "@absolutejs/agent-inbox": ["@absolutejs/agent-inbox@workspace:inbox"],
+
+    "@absolutejs/agent-memory": ["@absolutejs/agent-memory@workspace:memory"],
+
+    "@absolutejs/agent-reputation": ["@absolutejs/agent-reputation@workspace:reputation"],
+
+    "@absolutejs/agent-runtime": ["@absolutejs/agent-runtime@workspace:runtime"],
+
+    "@absolutejs/agent-sandbox": ["@absolutejs/agent-sandbox@workspace:sandbox"],
+
+    "@absolutejs/agent-trust": ["@absolutejs/agent-trust@workspace:trust"],
+
+    "@absolutejs/manifest": ["@absolutejs/manifest@0.4.0", "", { "peerDependencies": { "@sinclair/typebox": "^0.34.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-hhgUMB2Q9+m2BxL7D9fITQfCtYJTwA1IC1jZIFFvz6ESUz4FV2OlvR8q95Dk3xn+TVrSihTitia9VIXD2hD5QA=="],
+
+    "@electric-sql/pglite": ["@electric-sql/pglite@0.3.14", "", {}, "sha512-3DB258dhqdsArOI1fIt7cb9RpUOgcDg5hXWVgVHAeqVQ/qxtFy605QKs4gx6mFq3jWsSPqDN8TgSEsqC3OfV9Q=="],
+
+    "@sinclair/typebox": ["@sinclair/typebox@0.34.52", "", {}, "sha512-XiMQh7qqVlxZzcVD+kkGMNGMzcTrDMLWI7S4x7z1MkCkbDPrekpZXEUK0eZqZFMuHQg2a2DZOcDIh9o5v3Gonw=="],
+
+    "@types/bun": ["@types/bun@1.3.14", "", { "dependencies": { "bun-types": "1.3.14" } }, "sha512-h1hFqFVcvAvD9j9K7ZW7vd82aSA+rTdznZa+5bwvCwqSB1jmmfLcbIWhOLx1/+boy/xmjgCs/OMUL8hRJSmnPw=="],
+
+    "@types/node": ["@types/node@26.1.2", "", { "dependencies": { "undici-types": "~8.3.0" } }, "sha512-Vu4a5UFA9rIIFJ7rB/Vaafh9lrCQszopTCx6KjFboXTGQbPNasehVR5TEiithSDGyd1DEiUByggTZsg8jukeIg=="],
+
+    "bun-types": ["bun-types@1.3.14", "", { "dependencies": { "@types/node": "*" } }, "sha512-4N0ig0fEomHt5R0KCFWjovxow98rIoRwKolrYdCcknNwMekCXRnWEUvgu5soYV8QXtVsrUD8B95MBOZGPvr6KQ=="],
+
+    "drizzle-orm": ["drizzle-orm@1.0.0-rc.4", "", { "peerDependencies": { "@aws-sdk/client-rds-data": ">=3", "@cloudflare/workers-types": ">=4", "@effect/sql-d1": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-libsql": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-mysql2": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-pg": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-pglite": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-sqlite-bun": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-sqlite-do": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-sqlite-node": ">=4.0.0-beta.83 || >=4.0.0", "@effect/sql-sqlite-wasm": ">=4.0.0-beta.83 || >=4.0.0", "@electric-sql/pglite": ">=0.2.0", "@libsql/client": ">=0.10.0", "@libsql/client-wasm": ">=0.10.0", "@neondatabase/serverless": ">=0.10.0", "@op-engineering/op-sqlite": ">=2", "@opentelemetry/api": "^1.4.1", "@planetscale/database": ">=1.13", "@sinclair/typebox": ">=0.34.8", "@sqlitecloud/drivers": ">=1.0.653", "@tidbcloud/serverless": "*", "@tursodatabase/database": ">=0.6.0-pre.28 || >=0.6.0", "@tursodatabase/database-common": ">=0.6.0-pre.28 || >=0.6.0", "@tursodatabase/database-wasm": ">=0.6.0-pre.28 || >=0.6.0", "@tursodatabase/serverless": ">=1.1.3", "@tursodatabase/sync": ">=0.6.0-pre.28 || >=0.6.0", "@types/better-sqlite3": "*", "@types/mssql": "^9.1.4", "@types/pg": "*", "@types/sql.js": "*", "@upstash/redis": ">=1.34.7", "@vercel/postgres": ">=0.8.0", "@xata.io/client": "*", "arktype": ">=2.0.0", "better-sqlite3": ">=9.3.0", "bun-types": "*", "effect": ">=4.0.0-beta.83 || >=4.0.0", "expo-sqlite": ">=14.0.0", "mssql": "^11.0.1", "mysql2": ">=2", "pg": ">=8", "postgres": ">=3", "sql.js": ">=1", "sqlite3": ">=5", "typebox": ">=1.0.0", "valibot": ">=1.0.0-beta.7", "zod": "^3.25.0 || ^4.0.0" }, "optionalPeers": ["@aws-sdk/client-rds-data", "@cloudflare/workers-types", "@effect/sql-d1", "@effect/sql-libsql", "@effect/sql-mysql2", "@effect/sql-pg", "@effect/sql-pglite", "@effect/sql-sqlite-bun", "@effect/sql-sqlite-do", "@effect/sql-sqlite-node", "@effect/sql-sqlite-wasm", "@electric-sql/pglite", "@libsql/client", "@libsql/client-wasm", "@neondatabase/serverless", "@op-engineering/op-sqlite", "@opentelemetry/api", "@planetscale/database", "@sinclair/typebox", "@sqlitecloud/drivers", "@tidbcloud/serverless", "@tursodatabase/database", "@tursodatabase/database-common", "@tursodatabase/database-wasm", "@tursodatabase/serverless", "@tursodatabase/sync", "@types/better-sqlite3", "@types/mssql", "@types/pg", "@types/sql.js", "@upstash/redis", "@vercel/postgres", "@xata.io/client", "arktype", "better-sqlite3", "bun-types", "effect", "expo-sqlite", "mssql", "mysql2", "pg", "postgres", "sql.js", "sqlite3", "typebox", "valibot", "zod"] }, "sha512-BT+pf+qoiYHqltoA88Jmf6ilGMXPlpfE0hEJKc2adRtMCAl25Swk/t5gXcWxZNAwdtf3F5gCd2FpeOyP/pT0Hw=="],
+
+    "drizzle-typebox": ["drizzle-typebox@1.0.0-beta.14-a36c63d", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.8", "drizzle-orm": ">=1.0.0-beta.2" } }, "sha512-RSokv5jG/k0mh914/+xoCcWgLCvu9vDC2hiHcblH70XJuG4e6bpLi9tRjlkDl4bq4w3DFzstwwUKed6tlNTViw=="],
+
+    "prettier": ["prettier@3.8.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-7igPTM53cGHMW8xWuVTydi2KO233VFiTNyF5hLJqpilHfmn8C8gPf+PS7dUT64YcXFbiMGZxS9pCSxL/Dxm/Jw=="],
+
+    "typescript": ["typescript@6.0.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw=="],
+
+    "undici-types": ["undici-types@8.3.0", "", {}, "sha512-j375ScV60dom+YkPFIfTLcOiPxkN/buHz5GobjLhixFuANaNs3C9l4GmrWqejgXWJ7BbJcFYpTEUkS1Ge8bpZQ=="],
+
+    "@absolutejs/agency/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-control/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-control/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-control/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-discovery/@absolutejs/manifest": ["@absolutejs/manifest@0.8.0", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-kV5BFe/jxXrZa2TVkmpqpIBe+6oZkfSd9GEvyHIBMXgk6k2ohlQPKLu4PSFehZE9fWC6VZMh/WvH6GVbxRsWjA=="],
+
+    "@absolutejs/agent-discovery/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-discovery/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-inbox/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-inbox/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-inbox/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-memory/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-memory/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-memory/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-reputation/@absolutejs/manifest": ["@absolutejs/manifest@0.8.0", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-kV5BFe/jxXrZa2TVkmpqpIBe+6oZkfSd9GEvyHIBMXgk6k2ohlQPKLu4PSFehZE9fWC6VZMh/WvH6GVbxRsWjA=="],
+
+    "@absolutejs/agent-runtime/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-runtime/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-runtime/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-sandbox/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-sandbox/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-sandbox/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+
+    "@absolutejs/agent-trust/@absolutejs/manifest": ["@absolutejs/manifest@0.7.3", "", { "peerDependencies": { "@sinclair/typebox": ">=0.34.0 <0.35.0" }, "bin": { "absolute-manifest": "dist/cli.js" } }, "sha512-P0Tx5L+o4ZBBvmOz86JdjNYC1nUaCRgSlX8OgXzmGK0iSPL3gxdUUUyPKNUzjdQicu0Waj0MZHz1XIEBLtjTlw=="],
+
+    "@absolutejs/agent-trust/prettier": ["prettier@3.5.3", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw=="],
+
+    "@absolutejs/agent-trust/typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
+  }
+}
