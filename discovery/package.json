@@ -6,7 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/absolutejs/agent-discovery.git"
+    "url": "git+https://github.com/absolutejs/agent-modules.git",
+    "directory": "discovery"
+  },
+  "homepage": "https://github.com/absolutejs/agent-modules/tree/main/discovery",
+  "bugs": {
+    "url": "https://github.com/absolutejs/agent-modules/issues"
   },
   "publishConfig": {
     "access": "public"

@@ -6,7 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/absolutejs/agent-runtime.git"
+    "url": "git+https://github.com/absolutejs/agent-modules.git",
+    "directory": "runtime"
+  },
+  "homepage": "https://github.com/absolutejs/agent-modules/tree/main/runtime",
+  "bugs": {
+    "url": "https://github.com/absolutejs/agent-modules/issues"
   },
   "publishConfig": {
     "access": "public"

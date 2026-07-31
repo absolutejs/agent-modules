@@ -6,7 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/absolutejs/agent-trust.git"
+    "url": "git+https://github.com/absolutejs/agent-modules.git",
+    "directory": "trust"
+  },
+  "homepage": "https://github.com/absolutejs/agent-modules/tree/main/trust",
+  "bugs": {
+    "url": "https://github.com/absolutejs/agent-modules/issues"
   },
   "publishConfig": {
     "access": "public"

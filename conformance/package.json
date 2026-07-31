@@ -7,11 +7,12 @@
   "author": "Alex Kahn",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/absolutejs/agent-conformance.git"
+    "url": "git+https://github.com/absolutejs/agent-modules.git",
+    "directory": "conformance"
   },
-  "homepage": "https://github.com/absolutejs/agent-conformance",
+  "homepage": "https://github.com/absolutejs/agent-modules/tree/main/conformance",
   "bugs": {
-    "url": "https://github.com/absolutejs/agent-conformance/issues"
+    "url": "https://github.com/absolutejs/agent-modules/issues"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",

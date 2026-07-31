@@ -6,7 +6,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/absolutejs/agent-control.git"
+    "url": "git+https://github.com/absolutejs/agent-modules.git",
+    "directory": "control"
+  },
+  "homepage": "https://github.com/absolutejs/agent-modules/tree/main/control",
+  "bugs": {
+    "url": "https://github.com/absolutejs/agent-modules/issues"
   },
   "publishConfig": {
     "access": "public"
