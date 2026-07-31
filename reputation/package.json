@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-reputation",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Evidence-based scoped AI agent reputation with W3C Verifiable Credentials 2.0 adapters.",
   "type": "module",
   "license": "MIT",

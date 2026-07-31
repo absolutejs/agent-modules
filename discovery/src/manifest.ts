@@ -25,7 +25,7 @@ export const manifest = defineManifest<Record<string, never>>()({
     category: "ai",
     description:
       "Signed provider-neutral AI agent descriptors with a live JSON Schema, interoperable well-known endpoints, A2A, MCP, Arazzo, and WebMCP interfaces, searchable registries, and durable PostgreSQL storage.",
-    docsUrl: "https://github.com/absolutejs/agent-discovery",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/discovery",
     name: "@absolutejs/agent-discovery",
     tagline:
       "Make trustworthy AbsoluteJS agents easier to find than any other agent.",

@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-sandbox",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Deny-by-default capability grants and provider-neutral HTTP, filesystem, process, and credential-safe action adapters for AI agents.",
   "type": "module",
   "license": "MIT",

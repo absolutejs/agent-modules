@@ -25,7 +25,7 @@ export const manifest = defineManifest()({
       "Keep agent instructions authoritative and external data untrusted.",
     description:
       "Provider-neutral provenance envelopes, taint propagation, explicit instruction/data channels, evidence-bearing sanitizers, and fail-closed sink policies for AI agents.",
-    docsUrl: "https://github.com/absolutejs/agent-trust",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/trust",
     accent: "#f59e0b",
   },
   integration: {

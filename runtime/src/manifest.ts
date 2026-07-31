@@ -24,7 +24,7 @@ export const manifest = defineManifest<Record<string, never>>()({
     category: "ai",
     description:
       "Durable provider-neutral AI agent orchestration with leased runs, atomic steps, hard budgets, checkpoints, timers, cancellation, idempotent effects, and discovery-pinned handoffs.",
-    docsUrl: "https://github.com/absolutejs/agent-runtime",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/runtime",
     name: "@absolutejs/agent-runtime",
     tagline: "Run agents durably without choosing their model provider.",
   },

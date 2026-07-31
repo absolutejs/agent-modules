@@ -26,7 +26,7 @@ export const manifest = defineManifest()({
     tagline: "Give agents narrow capabilities, never ambient authority.",
     description:
       "Deny-by-default, expiring capability grants and idempotent provider-neutral action adapters for HTTP, filesystem, process, and credential-safe agent actions.",
-    docsUrl: "https://github.com/absolutejs/agent-sandbox",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/sandbox",
     accent: "#ef4444",
   },
   integration: {

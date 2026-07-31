@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-trust",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Provider-neutral provenance, taint propagation, instruction/data separation, and sink policy enforcement for AI agents.",
   "type": "module",
   "license": "MIT",

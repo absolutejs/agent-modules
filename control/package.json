@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-control",
-  "version": "0.5.7",
+  "version": "0.5.8",
   "description": "Authenticated AI agent operator API, console, and bound plan-then-execute playground.",
   "type": "module",
   "license": "MIT",

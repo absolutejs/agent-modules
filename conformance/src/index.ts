@@ -91,7 +91,8 @@ export type CapabilityConformanceHarness = {
 
 export const runCapabilityConformance = async (
   create: () =>
-    Promise<CapabilityConformanceHarness> | CapabilityConformanceHarness,
+    | Promise<CapabilityConformanceHarness>
+    | CapabilityConformanceHarness,
 ) => {
   const results = await Promise.all([
     scenario("capability/replay", async () => {
@@ -296,7 +297,8 @@ export type ExecutionConformanceHarness = {
 };
 export const runExecutionConformance = async (
   create: () =>
-    Promise<ExecutionConformanceHarness> | ExecutionConformanceHarness,
+    | Promise<ExecutionConformanceHarness>
+    | ExecutionConformanceHarness,
 ) => {
   const results = await Promise.all([
     scenario("execution/idempotent-enqueue", async () => {
@@ -734,7 +736,8 @@ export type DiscoveryConformanceHarness = {
 };
 export const runDiscoveryConformance = async (
   create: () =>
-    DiscoveryConformanceHarness | Promise<DiscoveryConformanceHarness>,
+    | DiscoveryConformanceHarness
+    | Promise<DiscoveryConformanceHarness>,
 ) =>
   report("agent-discovery", [
     await scenario("discovery/signed-descriptor", async () => {

@@ -25,7 +25,7 @@ export const manifest = defineManifest<Record<string, never>>()({
     category: "ai",
     description:
       "Evidence-based scoped agent reputation with verified issuers, expiration, revocation, time decay, issuer caps, confidence, PostgreSQL durability, and W3C Verifiable Credentials 2.0 adapters.",
-    docsUrl: "https://github.com/absolutejs/agent-reputation",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/reputation",
     name: "@absolutejs/agent-reputation",
     tagline: "Trust portable evidence, not a gameable global score.",
   },

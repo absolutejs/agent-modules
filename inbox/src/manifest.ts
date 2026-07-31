@@ -25,7 +25,7 @@ export const manifest = defineManifest()({
     tagline: "Wake agents from verified events, not ambient polling.",
     description:
       "Durable verified webhooks, event subscriptions, interval schedules, encrypted payloads, leases, retries, dead letters, and agent-runtime handoff.",
-    docsUrl: "https://github.com/absolutejs/agent-inbox",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/inbox",
     accent: "#06b6d4",
   },
   integration: {

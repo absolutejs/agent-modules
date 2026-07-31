@@ -25,7 +25,7 @@ export const manifest = defineManifest()({
     tagline: "Give agents useful memory without giving memory authority.",
     description:
       "Scoped durable provenance-aware agent memory with per-operation authorization, retention, subject erasure, encrypted codecs, trust validation, and pluggable retrieval indexes.",
-    docsUrl: "https://github.com/absolutejs/agent-memory",
+    docsUrl: "https://github.com/absolutejs/agent-modules/tree/main/memory",
     accent: "#8b5cf6",
   },
   integration: {
