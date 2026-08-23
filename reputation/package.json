@@ -1,6 +1,6 @@
 {
   "name": "@absolutejs/agent-reputation",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Evidence-based scoped AI agent reputation with W3C Verifiable Credentials 2.0 adapters.",
   "type": "module",
   "license": "MIT",
@@ -40,33 +40,20 @@
     "LICENSE"
   ],
   "absolutejs": {
-    "manifestContract": 2,
-    "runtimePeers": {
-      "drizzle-orm": {
-        "artifactImports": [
-          "drizzle-orm",
-          "drizzle-orm/pg-core"
-        ],
-        "buildExternals": [
-          "drizzle-orm"
-        ],
-        "optional": true,
-        "range": ">=1.0.0-rc.4 <2",
-        "tested": "1.0.0-rc.4"
-      }
-    }
+    "manifestContract": 2
   },
   "scripts": {
     "format": "prettier --write \"./**/*.{ts,json,md,yml}\"",
     "typecheck": "tsc --noEmit",
     "test": "bun test",
-    "build": "rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox && tsc -p tsconfig.build.json && absolute-manifest emit",
+    "build": "rm -rf dist && bun build src/index.ts src/drizzle.ts src/manifest.ts --outdir dist --target=bun --external @absolutejs/manifest --external @sinclair/typebox --external drizzle-orm --external 'drizzle-orm/*' --external drizzle-typebox --external typebox --external 'typebox/*' && tsc -p tsconfig.build.json && absolute-manifest emit",
     "check:package": "bun run format && bun run typecheck && bun run test && bun run build"
   },
   "dependencies": {
-    "@absolutejs/manifest": "^0.8.0",
+    "@absolutejs/manifest": "^0.10.0",
     "@sinclair/typebox": "^0.34.0",
-    "drizzle-typebox": "1.0.0-beta.14-a36c63d"
+    "drizzle-typebox": "1.0.0-beta.14-a36c63d",
+    "typebox": "^1.3.16"
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.3.14",
