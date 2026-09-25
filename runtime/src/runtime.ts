@@ -322,15 +322,30 @@ export const createAgentRuntime = ({
             run = resumed;
             continue;
           }
-          run = await handle(
-            run,
-            workerId,
-            await driver.next({
-              run,
-              steps,
-              remaining: remainingBudget(run.budget, run.usage),
-            }),
-          );
+          // Cancellation increments the durable version while a driver is awaiting
+          // a model. Re-read before using its result, so no stale result can start
+          // an effect and cancellation does not wait for lease expiry.
+          const cancelledWhileDriving = async () => {
+            const latest = await store.getRun(run!.id);
+            if (latest?.cancelRequestedAt && latest.status === "running" &&
+                latest.leaseOwner === workerId && latest.leaseExpiresAt &&
+                Date.parse(latest.leaseExpiresAt) > now())
+              return transition(latest, workerId, { status: "cancelled" });
+            return undefined;
+          };
+          let next: AgentTransition;
+          try {
+            next = await driver.next({
+              run, steps, remaining: remainingBudget(run.budget, run.usage),
+            });
+          } catch (error) {
+            const cancelled = await cancelledWhileDriving();
+            if (cancelled) { run = cancelled; break; }
+            throw error;
+          }
+          const cancelled = await cancelledWhileDriving();
+          if (cancelled) { run = cancelled; break; }
+          run = await handle(run, workerId, next);
         } catch (error) {
           if (
             error instanceof Error &&

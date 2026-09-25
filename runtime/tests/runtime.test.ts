@@ -270,3 +270,25 @@ describe("agent runtime", () => {
     await worker.stop();
   });
 });
+
+for (const throws of [false, true]) {
+ test(`cancellation during an awaited driver ${throws ? 'failure' : 'effect proposal'} finishes without starting effects`, async () => {
+  const store = createMemoryAgentRuntimeStore();
+  let enter!: () => void, release!: () => void, effects = 0;
+  const entered = new Promise<void>((resolve) => { enter=resolve; });
+  const released = new Promise<void>((resolve) => { release=resolve; });
+  const runtime = createAgentRuntime({store,
+   driver: { next: async () => {
+    enter(); await released;
+    if(throws) throw new Error('aborted provider request');
+    return {type:'effect',name:'must-not-run',input:{},idempotencyKey:'cancelled-effect'};
+   } }, effects: {execute:async () => { effects++; }}
+  });
+  const run = await runtime.start({actor,agent,goal:'Cancel inflight',input:{}});
+  const working=runtime.workOne('cancellation-worker');
+  await entered; await runtime.cancel(run.id); release();
+  expect((await working)?.status).toBe('cancelled');
+  expect(effects).toBe(0);
+  expect((await store.listSteps(run.id)).length).toBe(0);
+ });
+}
